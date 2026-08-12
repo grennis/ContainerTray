@@ -31,16 +31,16 @@ struct ContainerMenuView: View {
         }
 
         if !manager.machines.isEmpty {
-            Divider()
-            Text("Machines")
-            ForEach(manager.machines) { machine in
-                Button {
-                    manager.runMachine(machine)
-                } label: {
-                    Label {
-                        Text(machine.id)
-                    } icon: {
-                        machineIcon
+            Section("Machines") {
+                ForEach(manager.machines) { machine in
+                    Button {
+                        manager.runMachine(machine)
+                    } label: {
+                        Label {
+                            Text(machine.id)
+                        } icon: {
+                            machineIcon
+                        }
                     }
                 }
             }
