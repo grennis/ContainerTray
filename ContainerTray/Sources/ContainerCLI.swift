@@ -42,6 +42,14 @@ struct ContainerCLI {
         _ = try await run(["stop", id])
     }
 
+    func startSystem() async throws {
+        _ = try await run(["system", "start"])
+    }
+
+    func stopSystem() async throws {
+        _ = try await run(["system", "stop"])
+    }
+
     func listMachines() async throws -> [ContainerMachine] {
         let output = try await run(["machine", "list", "--format", "json"])
         let trimmed = output.trimmingCharacters(in: .whitespacesAndNewlines)

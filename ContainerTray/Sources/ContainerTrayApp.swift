@@ -16,14 +16,21 @@ struct ContainerTrayApp: App {
     }
 
     private var menuBarIcon: Image {
-        guard manager.hasRunningContainer else {
-            return Image(systemName: "server.rack")
-        }
         // MenuBarExtra forces symbol images to render as a monochrome
-        // template regardless of foregroundColor/renderingMode, so the
-        // colored icon has to be built as a non-template NSImage instead.
-        let configuration = NSImage.SymbolConfiguration(paletteColors: [.systemGreen])
-        let nsImage = NSImage(systemSymbolName: "server.rack", accessibilityDescription: "Containers running")?
+        // template regardless of foregroundColor/renderingMode, so a colored
+        // icon has to be built as a non-template NSImage instead.
+        if manager.hasRunningContainer {
+            return coloredIcon(.systemGreen, accessibilityDescription: "Containers running")
+        }
+        if manager.hasFailure {
+            return coloredIcon(.systemRed, accessibilityDescription: "Container error")
+        }
+        return Image(systemName: "server.rack")
+    }
+
+    private func coloredIcon(_ color: NSColor, accessibilityDescription: String) -> Image {
+        let configuration = NSImage.SymbolConfiguration(paletteColors: [color])
+        let nsImage = NSImage(systemSymbolName: "server.rack", accessibilityDescription: accessibilityDescription)?
             .withSymbolConfiguration(configuration)
         nsImage?.isTemplate = false
         return Image(nsImage: nsImage ?? NSImage())

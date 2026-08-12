@@ -29,8 +29,26 @@ final class ContainerManager: ObservableObject {
     private var reconciliationTasks: [Task<Void, Never>] = []
     private static let reconciliationDelays: [Double] = [0.75, 2.0]
 
+    /// Substring `container` prints when its background XPC service isn't
+    /// running (for example right after a reboot, before `container system
+    /// start` has been run). This is treated as expected, quiet state rather
+    /// than a failure.
+    private static let serviceStoppedSignature = "XPC connection error: Connection invalid"
+
     var hasRunningContainer: Bool {
         containers.contains { $0.isRunning }
+    }
+
+    /// True when the last refresh failed because the `container` background
+    /// service isn't running, as opposed to some other failure.
+    var isServiceStopped: Bool {
+        lastError?.contains(Self.serviceStoppedSignature) ?? false
+    }
+
+    /// True when the last refresh failed for any reason other than the
+    /// service simply being stopped.
+    var hasFailure: Bool {
+        lastError != nil && !isServiceStopped
     }
 
     init() {
@@ -102,5 +120,25 @@ final class ContainerManager: ObservableObject {
         } catch {
             lastError = error.localizedDescription
         }
+    }
+
+    func startServices() async {
+        do {
+            try await cli.startSystem()
+        } catch {
+            lastError = error.localizedDescription
+        }
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        await refresh()
+    }
+
+    func stopServices() async {
+        do {
+            try await cli.stopSystem()
+        } catch {
+            lastError = error.localizedDescription
+        }
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        await refresh()
     }
 }
