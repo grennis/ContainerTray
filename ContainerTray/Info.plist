@@ -20,6 +20,8 @@
 	<string>1</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>ContainerTray opens Terminal to run an interactive container machine session.</string>
 	<key>NSHumanReadableCopyright</key>
 	<string></string>
 </dict>

@@ -30,6 +30,7 @@ struct ContainerCLI {
         let entries = try JSONDecoder().decode([ContainerListEntry].self, from: data)
         return entries
             .map(ContainerItem.init(entry:))
+            .filter { !$0.id.localizedCaseInsensitiveContains("buildkit") }
             .sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }
     }
 
@@ -39,6 +40,48 @@ struct ContainerCLI {
 
     func stop(id: String) async throws {
         _ = try await run(["stop", id])
+    }
+
+    func listMachines() async throws -> [ContainerMachine] {
+        let output = try await run(["machine", "list", "--format", "json"])
+        let trimmed = output.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty, let data = trimmed.data(using: .utf8) else {
+            return []
+        }
+        let entries = try JSONDecoder().decode([ContainerMachineListEntry].self, from: data)
+        return entries
+            .map(ContainerMachine.init(entry:))
+            .sorted { $0.id.localizedStandardCompare($1.id) == .orderedAscending }
+    }
+
+    /// `machine run` needs a real TTY, so it's opened in Terminal.app instead
+    /// of run headless. There's no separate stop action: the machine session
+    /// ends when the user closes or exits that Terminal window.
+    func runMachine(name: String) throws {
+        guard let executablePath = Self.searchPaths.first(where: { FileManager.default.isExecutableFile(atPath: $0) }) else {
+            throw ContainerCLIError.notFound
+        }
+        let shellCommand = "\(shellQuoted(executablePath)) machine run -n \(shellQuoted(name))"
+        let script = """
+        tell application "Terminal"
+            activate
+            do script "\(appleScriptQuoted(shellCommand))"
+        end tell
+        """
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/osascript")
+        process.arguments = ["-e", script]
+        try process.run()
+    }
+
+    private func shellQuoted(_ string: String) -> String {
+        "'" + string.replacingOccurrences(of: "'", with: "'\\''") + "'"
+    }
+
+    private func appleScriptQuoted(_ string: String) -> String {
+        string
+            .replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
     }
 
     @discardableResult

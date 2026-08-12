@@ -38,3 +38,24 @@ extension ContainerItem {
         )
     }
 }
+
+struct ContainerMachine: Identifiable, Equatable {
+    let id: String
+    let status: String
+
+    var isRunning: Bool {
+        status.caseInsensitiveCompare("running") == .orderedSame
+    }
+}
+
+/// Mirrors the JSON emitted by `container machine list --format json`.
+struct ContainerMachineListEntry: Decodable {
+    let id: String
+    let status: String
+}
+
+extension ContainerMachine {
+    init(entry: ContainerMachineListEntry) {
+        self.init(id: entry.id, status: entry.status)
+    }
+}
