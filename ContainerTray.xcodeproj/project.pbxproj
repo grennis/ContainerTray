@@ -10,6 +10,7 @@
 		15757BC291116260ACC249C0 /* ContainerCLI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01C3C3BB7D16BE6EA23EF751 /* ContainerCLI.swift */; };
 		4BAB5294CC63E1F04712FC36 /* ContainerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974A1179576F349A948D3765 /* ContainerManager.swift */; };
 		4E7BD3DADFF293EC977B77B5 /* ContainerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97057DAE5C4FB84600050BE /* ContainerModel.swift */; };
+		63614C3F71A8090C94CD5EC8 /* ContainerFSWatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = E37BC9E06E8B99CC5312950F /* ContainerFSWatcher.swift */; };
 		68CE6D20016CE4557BD8C676 /* ContainerMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6127211FE99B6BFAE8758B19 /* ContainerMenuView.swift */; };
 		E6ECE17B3CE227D99EFFE7B1 /* ContainerTrayApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF114AA63877166529ADEEE2 /* ContainerTrayApp.swift */; };
 /* End PBXBuildFile section */
@@ -20,6 +21,7 @@
 		974A1179576F349A948D3765 /* ContainerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerManager.swift; sourceTree = "<group>"; };
 		9DA399963DA938FB0FD06EF6 /* ContainerTray.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ContainerTray.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C97057DAE5C4FB84600050BE /* ContainerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerModel.swift; sourceTree = "<group>"; };
+		E37BC9E06E8B99CC5312950F /* ContainerFSWatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerFSWatcher.swift; sourceTree = "<group>"; };
 		FF114AA63877166529ADEEE2 /* ContainerTrayApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerTrayApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -52,6 +54,7 @@
 			isa = PBXGroup;
 			children = (
 				01C3C3BB7D16BE6EA23EF751 /* ContainerCLI.swift */,
+				E37BC9E06E8B99CC5312950F /* ContainerFSWatcher.swift */,
 				974A1179576F349A948D3765 /* ContainerManager.swift */,
 				6127211FE99B6BFAE8758B19 /* ContainerMenuView.swift */,
 				C97057DAE5C4FB84600050BE /* ContainerModel.swift */,
@@ -120,6 +123,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				15757BC291116260ACC249C0 /* ContainerCLI.swift in Sources */,
+				63614C3F71A8090C94CD5EC8 /* ContainerFSWatcher.swift in Sources */,
 				4BAB5294CC63E1F04712FC36 /* ContainerManager.swift in Sources */,
 				68CE6D20016CE4557BD8C676 /* ContainerMenuView.swift in Sources */,
 				4E7BD3DADFF293EC977B77B5 /* ContainerModel.swift in Sources */,

@@ -9,6 +9,9 @@ final class ContainerManager: ObservableObject {
     @Published private(set) var pendingContainerIDs: Set<String> = []
 
     private let cli = ContainerCLI()
+    private lazy var fsWatcher = ContainerFSWatcher { [weak self] in
+        Task { await self?.refresh() }
+    }
 
     var hasRunningContainer: Bool {
         containers.contains { $0.isRunning }
@@ -16,6 +19,7 @@ final class ContainerManager: ObservableObject {
 
     init() {
         Task { await refresh() }
+        fsWatcher.start()
     }
 
     func refresh() async {
