@@ -1,0 +1,30 @@
+name: Engineering HQ
+
+on:
+  pull_request:
+    paths:
+      - "EngineeringHQ/**"
+      - ".github/workflows/engineering-hq.yml"
+  push:
+    branches: [main]
+    paths:
+      - "EngineeringHQ/**"
+      - ".github/workflows/engineering-hq.yml"
+
+jobs:
+  build:
+    runs-on: macos-15
+    defaults:
+      run:
+        working-directory: EngineeringHQ
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Build
+        run: |
+          xcodebuild -project EngineeringHQ.xcodeproj -scheme EngineeringHQ \
+            -configuration Debug -destination 'platform=macOS' build \
+            CODE_SIGNING_ALLOWED=NO
