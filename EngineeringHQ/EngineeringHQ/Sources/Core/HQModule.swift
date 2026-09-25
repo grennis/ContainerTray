@@ -1,3 +1,4 @@
+import Combine
 import SwiftUI
 
 /// Summary state a module reports to the shell. The sidebar shows it next to
